@@ -1,1 +1,3 @@
 .venv
+website/__pycache__
+.env
