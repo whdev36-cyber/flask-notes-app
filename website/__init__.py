@@ -11,7 +11,7 @@ def create_app():
     from . import views
     from . import auth
 
-    return app
+    app.register_blueprint(views.views, url_prefix='/')
+    app.register_blueprint(auth.auth, url_prefix='/')
 
-import secrets
-print(secrets.token_hex())
+    return app
