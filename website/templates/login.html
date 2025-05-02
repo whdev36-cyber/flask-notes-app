@@ -2,4 +2,22 @@
 
 {% block title %}Login{% endblock %}
 {% block content %}
+<form method="post">
+    <h2>Login User</h2>
+    <fieldset>
+        <div>
+            {{ form.email.label }}
+            {{ form.email(placeholder='Enter your email address') }}
+        </div>
+        <div>
+            {{ form.password.label }}
+            {{ form.password(placeholder='Enter your password') }}
+        </div>
+        <div>
+            {{ form.remember }}
+            {{ form.remember.label }}
+        </div>
+    </fieldset>
+    {{ form.submit }}
+</form>
 {% endblock %}
