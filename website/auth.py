@@ -16,8 +16,8 @@ def login():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        new_user = User(email=form.email.data, name=form.name.data)
-        new_user.password = generate_password_hash(password=form.password.data, method='scrypt')
+        new_user = User(email=form.email.data, name=form.name.data,
+            password=generate_password_hash(password=form.password.data, method='scrypt'))
         db.session.add(new_user)
         db.session.commit()
         flash('Your account has been created! Please log in.', category='success')
