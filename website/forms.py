@@ -7,7 +7,7 @@ from website import db
 class LoginForm(FlaskForm):
     email = EmailField('Email Address', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
-    remember = BooleanField('Remember me', validators=[DataRequired()])
+    remember = BooleanField('Remember me', validators=[])
     submit = SubmitField('Login')
 
 class RegisterForm(FlaskForm):

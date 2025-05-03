@@ -40,3 +40,8 @@ def register():
             flash('Your account has been created! Please log in.', category='success')
             return redirect(url_for('auth.login'))
     return render_template('register.html', form=form)
+
+@auth.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('auth.login'))
