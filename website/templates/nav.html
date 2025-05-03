@@ -1,9 +1,12 @@
 <nav class="container">
     <ul>
         <li><a href="{{ url_for('views.home') }}" class="contrast">Home</a></li>
-        <li><a href="{{ url_for('auth.register') }}" class="contrast">Register</a></li>
-        <li><a href="{{ url_for('auth.login') }}" class="contrast">Login</a></li>
-        <li><a href="#" class="contrast">Profile</a></li>
-        <li><a href="#" class="contrast">Logout</a></li>
+        {% if not current_user.is_authenticated %}
+            <li><a href="{{ url_for('auth.register') }}" class="contrast">Register</a></li>
+            <li><a href="{{ url_for('auth.login') }}" class="contrast">Login</a></li>
+        {% else %}
+            <li><a href="#" class="contrast">Profile</a></li>
+            <li><a href="#" class="contrast">Logout</a></li>
+        {% endif %}
     </ul>
 </nav>
