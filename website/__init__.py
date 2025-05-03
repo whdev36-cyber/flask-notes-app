@@ -19,6 +19,10 @@ def create_app():
 
     db.init_app(app)
     lm.init_app(app)
+
+    lm.login_view = 'auth.login'
+    lm.login_message = ''
+    lm.login_message_category = ''
     
     from . import views
     from . import auth
