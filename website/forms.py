@@ -21,3 +21,7 @@ class RegisterForm(FlaskForm):
         user = User.query.filter_by(email=email.data.lower()).first()
         if user:
             raise ValidationError('Email already exists. Please choose a different one.')
+        
+class NoteForm(FlaskForm):
+    data = TextAreaField('Data', validators=[DataRequired()])
+    submit = SubmitField('Save')
