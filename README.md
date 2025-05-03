@@ -77,19 +77,27 @@ python -m website
 ## 📂 Project Structure
 
 ```
-flask-notes-app/
-│
-├── website/
-│   ├── static/
-│   ├── templates/
-│   ├── __init__.py
-│   ├── auth.py
-│   ├── views.py
-│   ├── models.py
-│   └── forms.py
-├── .env
+flask-notes-app
+├── instance
+│   └── website.db
+├── LICENSE
+├── main.py
+├── README.md
 ├── requirements.txt
-└── README.md
+└── website
+    ├── auth.py
+    ├── forms.py
+    ├── __init__.py
+    ├── models.py
+    ├── static
+    ├── templates
+    │   ├── base.html
+    │   ├── home.html
+    │   ├── login.html
+    │   ├── nav.html
+    │   └── register.html
+    └── views.py
+
 ```
 
 ## 📄 License
