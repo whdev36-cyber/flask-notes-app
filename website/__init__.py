@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
 import os
 import dotenv
@@ -8,6 +9,7 @@ dotenv.load_dotenv()
 DB_NAME = 'website.db'
 
 db = SQLAlchemy()
+lm = LoginManager()
 
 def create_app():
     app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/')
@@ -16,6 +18,7 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
+    lm.init_app(app)
     
     from . import views
     from . import auth
@@ -26,6 +29,10 @@ def create_app():
     from . import models
     from .models import User, Note
     create_db(app)
+
+    @lm.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
     return app
 
