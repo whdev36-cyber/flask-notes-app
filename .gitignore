@@ -3,3 +3,4 @@ website/__pycache__
 .env
 instance
 .vscode
+website.db

@@ -29,11 +29,11 @@ class Config:
 
 def register_blueprints(app):
     """Register all application blueprints"""
-    from website.views import views_bp
-    from website.auth import auth_bp
+    from website.views import views
+    from website.auth import auth
     
-    app.register_blueprint(views_bp, url_prefix='/')
-    app.register_blueprint(auth_bp, url_prefix='/auth/')
+    app.register_blueprint(views, url_prefix='/')
+    app.register_blueprint(auth, url_prefix='/auth/')
 
 def setup_login_manager(app):
     """Configure Flask-Login extension"""
