@@ -3,6 +3,7 @@ import json
 import os
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
+from datetime import datetime as dt
 
 DB_NAME = 'website.db'
 DB_PATH = Path(__file__).parent / DB_NAME
@@ -12,6 +13,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+class Note(db.Model):
+    __tablename__ = 'notes'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Content(db.String(150), nullable=False, default=dt.now())
+    content = db.Column(db.Text(), nullable=False)
+
+    def __repr__(self):
+        return self.title
 
 @app.route('/')
 @app.route('/home')
