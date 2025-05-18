@@ -1,1 +1,8 @@
-hello
+{% if notes %}
+    <dl>
+        {% for note in notes %}
+            <dt>{{ note.title }}</dt>
+            <dd>{{ note.content }}</dd>
+        {% endfor %}
+    </dl>
+{% endif %}
