@@ -1,8 +1,12 @@
-{% if notes %}
-    <dl>
-        {% for note in notes %}
-            <dt>{{ note.title }}</dt>
-            <dd>{{ note.content }}</dd>
-        {% endfor %}
-    </dl>
-{% endif %}
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    {% if notes %}
+        <dl>
+            {% for note in notes %}
+                <dt>{{ note.title }}</dt>
+                <dd>{{ note.content }}</dd>
+            {% endfor %}
+        </dl>
+    {% endif %}
+{% endblock %}
