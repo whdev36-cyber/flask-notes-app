@@ -1,6 +1,5 @@
 from flask import Flask, render_template as render
-import json
-import os
+from flask_login import LoginManager, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 from datetime import datetime as dt
@@ -13,6 +12,20 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+login_manager = LoginManager(app)
+
+class User(db.Model, UserMixin):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(150), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+
+    def __repr__(self):
+        return self.email
+    
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get_id(int(user_id))
 
 class Note(db.Model):
     __tablename__ = 'notes'
