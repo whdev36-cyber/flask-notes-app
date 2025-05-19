@@ -31,4 +31,7 @@ def index():
     return render('index.html', notes=notes)
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+        print(' * Database is active!')
     app.run(debug=True, port=5555, host='0.0.0.0')
