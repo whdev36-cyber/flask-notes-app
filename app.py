@@ -46,6 +46,10 @@ def index():
     notes = Note.query.all()
     return render('index.html', notes=notes)
 
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    return render('register.html')
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
