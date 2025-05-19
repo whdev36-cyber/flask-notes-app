@@ -17,7 +17,7 @@ db = SQLAlchemy(app)
 class Note(db.Model):
     __tablename__ = 'notes'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Content(db.String(150), nullable=False, default=dt.now())
+    title = db.Column(db.String(150), nullable=False, default=dt.now())
     content = db.Column(db.Text(), nullable=False)
 
     def __repr__(self):
