@@ -28,6 +28,11 @@ class Note(db.Model):
 def index():
     with open('data/notes.json', 'r') as f:
         notes = json.load(f)
+    for note in notes:
+        new_note = Note(title=note['title'], content=note['content'])
+        db.session.add(new_note)
+        db.session.commit()
+
     return render('index.html', notes=notes)
 
 if __name__ == '__main__':
