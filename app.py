@@ -4,6 +4,10 @@ from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 from datetime import datetime as dt
 from flask_migrate import Migrate
+from flask_wtf import FlaskForm
+from wtforms import EmailField, PasswordField, SubmitField
+from wtforms.validators import Email, DataRequired, EqualTo, Length
+import os
 
 DB_NAME = 'website.db'
 DB_PATH = Path(__file__).parent / DB_NAME
@@ -11,6 +15,7 @@ DB_PATH = Path(__file__).parent / DB_NAME
 app = Flask(__name__, template_folder='templates')
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-fallback-key')
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -40,6 +45,12 @@ class Note(db.Model):
     def __repr__(self):
         return self.title
 
+class RegisterForm(FlaskForm):
+    email = EmailField('Email Address', validators=[DataRequired(), Email()])
+    password = PasswordField('Create password', validators=[DataRequired(), Length(min=6)])
+    password_confirm = PasswordField('Confirm password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Register')
+
 @app.route('/')
 @app.route('/home')
 def index():
@@ -48,7 +59,8 @@ def index():
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
-    return render('register.html')
+    form = RegisterForm()
+    return render('register.html', form=form)
 
 if __name__ == '__main__':
     with app.app_context():
