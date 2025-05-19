@@ -26,13 +26,7 @@ class Note(db.Model):
 @app.route('/')
 @app.route('/home')
 def index():
-    with open('data/notes.json', 'r') as f:
-        notes = json.load(f)
-    for note in notes:
-        new_note = Note(title=note['title'], content=note['content'])
-        db.session.add(new_note)
-        db.session.commit()
-
+    notes = Note.query.all()
     return render('index.html', notes=notes)
 
 if __name__ == '__main__':
