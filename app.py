@@ -3,7 +3,7 @@ from flask_login import LoginManager, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 from datetime import datetime as dt
-from flask_migrate import Migrate
+# from flask_migrate import Migrates
 from flask_wtf import FlaskForm
 from wtforms import EmailField, PasswordField, SubmitField
 from wtforms.validators import Email, DataRequired, EqualTo, Length, ValidationError
@@ -22,7 +22,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-fallback-key')
 
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+# migrate = Migrate(app, db)
 login_manager = LoginManager(app)
 
 class User(db.Model, UserMixin):
