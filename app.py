@@ -9,7 +9,7 @@ from pathlib import Path
 from datetime import datetime as dt
 import os
 import dotenv
-import logging
+# import logging
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -34,8 +34,8 @@ login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 login_manager.login_message = 'Please log in to access this page.'
 
-# Enable logging
-logging.basicConfig(level=logging.INFO)
+# # Enable logging
+# logging.basicConfig(level=logging.INFO)
 
 # Models
 class User(db.Model, UserMixin):
@@ -125,5 +125,6 @@ def logout():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        logging.info(' * Database initialized.')
+        # logging.info(' * Database initialized.')
+        print(' * Database initialized.')
     app.run(debug=True, port=5555, host='0.0.0.0')
