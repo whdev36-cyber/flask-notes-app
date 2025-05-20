@@ -9,6 +9,9 @@ from wtforms import EmailField, PasswordField, SubmitField
 from wtforms.validators import Email, DataRequired, EqualTo, Length, ValidationError
 import os
 from werkzeug.security import generate_password_hash
+import dotenv
+
+dotenv.load_dotenv()
 
 DB_NAME = 'website.db'
 DB_PATH = Path(__file__).parent / DB_NAME

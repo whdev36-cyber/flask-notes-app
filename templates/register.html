@@ -5,7 +5,7 @@
         <div class="col-md-6 offset-md-3 bg-light border shadow-sm rounded p-5">
             <h2 class="text-center display-4 mb-5">Register</h2>
             <form method="post">
-                {{ form.hidden_tag() }}
+                {{ form.csrf_token }}
                 <div class="form-group mb-3">
                     {{ form.email.label(class="form-label") }}
                     {{ form.email(class="form-control") }}
