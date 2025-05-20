@@ -1,5 +1,5 @@
 from flask import Flask, render_template as render, redirect, url_for, request, flash
-from flask_login import LoginManager, UserMixin, login_user, current_user, login_required
+from flask_login import LoginManager, UserMixin, login_user, current_user, login_required, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 from datetime import datetime as dt
@@ -70,7 +70,6 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember me')
     submit = SubmitField('Login')
 
-@login_required
 @app.route('/')
 @app.route('/home')
 def index():
@@ -104,6 +103,12 @@ def login():
             return redirect(next_url or url_for('index'))
         flash('Invalid email or password', category='danger')
     return render('login.html', form=form)
+
+@login_required
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     with app.app_context():
