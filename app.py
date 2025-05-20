@@ -6,7 +6,7 @@ from datetime import datetime as dt
 from flask_migrate import Migrate
 from flask_wtf import FlaskForm
 from wtforms import EmailField, PasswordField, SubmitField
-from wtforms.validators import Email, DataRequired, EqualTo, Length
+from wtforms.validators import Email, DataRequired, EqualTo, Length, ValidationError
 import os
 from werkzeug.security import generate_password_hash
 
@@ -25,7 +25,7 @@ login_manager = LoginManager(app)
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(150), nullable=False)
+    email = db.Column(db.String(150), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
     notes = db.relationship('Note', backref='author', lazy=True)
 
@@ -51,6 +51,11 @@ class RegisterForm(FlaskForm):
     password = PasswordField('Create password', validators=[DataRequired(), Length(min=6)])
     password_confirm = PasswordField('Confirm password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data.strip().lower()).first()
+        if user:
+            raise ValidationError('This email is already registered.')
 
 @app.route('/')
 @app.route('/home')
