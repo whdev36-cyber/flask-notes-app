@@ -1,5 +1,5 @@
 from flask import Flask, render_template as render, redirect, url_for, request, flash
-from flask_login import LoginManager, UserMixin, login_user, current_user
+from flask_login import LoginManager, UserMixin, login_user, current_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 from datetime import datetime as dt
@@ -24,6 +24,10 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-fallback-key')
 db = SQLAlchemy(app)
 # migrate = Migrate(app, db)
 login_manager = LoginManager(app)
+
+login_manager.login_view = 'login'
+login_manager.login_message_category = 'info'
+login_manager.login_message = 'Please log in to access this page.'
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -66,6 +70,7 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember me')
     submit = SubmitField('Login')
 
+@login_required
 @app.route('/')
 @app.route('/home')
 def index():
