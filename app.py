@@ -63,8 +63,8 @@ class RegisterForm(FlaskForm):
 @app.route('/')
 @app.route('/home')
 def index():
-    notes = Note.query.all()
-    return render('index.html', notes=notes)
+    users = User.query.all()
+    return render('index.html', users=users)
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
