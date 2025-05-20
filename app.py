@@ -3,7 +3,7 @@ from flask_login import LoginManager, UserMixin, login_user, current_user, login
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_wtf import FlaskForm
-from wtforms import EmailField, PasswordField, SubmitField, BooleanField
+from wtforms import EmailField, PasswordField, SubmitField, BooleanField, StringField, TextAreaField
 from wtforms.validators import Email, DataRequired, EqualTo, Length, ValidationError
 from pathlib import Path
 from datetime import datetime as dt
@@ -79,6 +79,11 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+class NoteForm(FlaskForm):
+    title = StringField('Title', validators=[Length(min=1, max=150)])
+    content = TextAreaField('Content', validators=[DataRequired()])
+    submit = SubmitField('Save')
+
 # Routes
 @app.route('/')
 @app.route('/home')
@@ -120,6 +125,21 @@ def logout():
     logout_user()
     flash('You have been logged out.', category='info')
     return redirect(url_for('login'))
+
+@app.route('/create/note', methods=['POST', 'GET'])
+@login_required
+def create_note():
+    form = NoteForm()
+    if form.validate_on_submit():
+        new_note = Note(title=form.title.data, content=form.content.data, author=current_user)
+        db.session.add(new_note)
+        db.session.commit()
+        flash('Note created successfully!', category='success')
+        return redirect(url_for('index'))
+    return render('note_form.html', form=form, title='Create Note')
+
+# @app.route('/update/note')
+# @app.route('/delete/note')
 
 # Run app
 if __name__ == '__main__':
