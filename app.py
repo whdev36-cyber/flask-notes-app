@@ -1,4 +1,4 @@
-from flask import Flask, render_template as render
+from flask import Flask, render_template as render, redirect, url_for
 from flask_login import LoginManager, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
@@ -8,6 +8,7 @@ from flask_wtf import FlaskForm
 from wtforms import EmailField, PasswordField, SubmitField
 from wtforms.validators import Email, DataRequired, EqualTo, Length
 import os
+from werkzeug.security import generate_password_hash
 
 DB_NAME = 'website.db'
 DB_PATH = Path(__file__).parent / DB_NAME
@@ -60,6 +61,12 @@ def index():
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     form = RegisterForm()
+    if form.validate_on_submit():
+        hashed_password = generate_password_hash(form.password.data)
+        new_user = User(email=form.email.data, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect(url_for('index')) # TODO: Change to login
     return render('register.html', form=form)
 
 if __name__ == '__main__':
