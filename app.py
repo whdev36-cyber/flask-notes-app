@@ -1,14 +1,14 @@
-from flask import Flask, render_template as render, redirect, url_for
-from flask_login import LoginManager, UserMixin
+from flask import Flask, render_template as render, redirect, url_for, request, flash
+from flask_login import LoginManager, UserMixin, login_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 from datetime import datetime as dt
 # from flask_migrate import Migrates
 from flask_wtf import FlaskForm
-from wtforms import EmailField, PasswordField, SubmitField
+from wtforms import EmailField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import Email, DataRequired, EqualTo, Length, ValidationError
 import os
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 import dotenv
 
 dotenv.load_dotenv()
@@ -59,6 +59,12 @@ class RegisterForm(FlaskForm):
         user = User.query.filter_by(email=email.data.strip().lower()).first()
         if user:
             raise ValidationError('This email is already registered.')
+        
+class LoginForm(FlaskForm):
+    email = EmailField('Email Address', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
+    remember = BooleanField('Remember me')
+    submit = SubmitField('Login')
 
 @app.route('/')
 @app.route('/home')
@@ -68,14 +74,31 @@ def index():
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = RegisterForm()
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data)
         new_user = User(email=form.email.data, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
-        return redirect(url_for('index')) # TODO: Change to login
+        flash('Your account has been created successfully. Please login to your account!', category='success')
+        return redirect(url_for('login'))
     return render('register.html', form=form)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
+            next_url = request.args.get('next')
+            return redirect(next_url or url_for('index'))
+        flash('Invalid email or password', category='danger')
+    return render('login.html', form=form)
 
 if __name__ == '__main__':
     with app.app_context():
