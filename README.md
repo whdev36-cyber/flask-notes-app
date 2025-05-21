@@ -30,7 +30,7 @@ A simple, modern Flask-based note-taking web app with user authentication, note 
 │   ├── base.html
 │   ├── index.html
 │   ├── login.html
-│   ├── note\_form.html
+│   ├── note_form.html
 │   └── register.html
 └── website.db             # SQLite database
 
