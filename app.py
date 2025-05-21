@@ -88,7 +88,10 @@ class NoteForm(FlaskForm):
 @app.route('/')
 @app.route('/home')
 def index():
-    notes = Note.query.order_by(Note.id.desc()).all()
+    if current_user.is_authenticated:
+        notes = Note.query.filter_by(user_id=current_user.id).all()
+    else:
+        notes = []
     return render('index.html', notes=notes)
 
 @app.route('/register', methods=['GET', 'POST'])
