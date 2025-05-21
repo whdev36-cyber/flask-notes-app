@@ -88,8 +88,8 @@ class NoteForm(FlaskForm):
 @app.route('/')
 @app.route('/home')
 def index():
-    users = User.query.all()
-    return render('index.html', users=users)
+    notes = Note.query.order_by(Note.id.desc()).all()
+    return render('index.html', notes=notes)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -155,7 +155,7 @@ def update_note(note_id):
         return redirect(url_for('index'))
     return render('note_form.html', form=form, title='Update Note')
 
-@app.route('/delete/note/<note_id>')
+@app.route('/delete/note/<note_id>', methods=['GET', 'POST'])
 @login_required
 def delete_note(note_id):
     note = Note.query.get_or_404(note_id)

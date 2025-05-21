@@ -1,18 +1,20 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
-    {% if users %}
-        <ul>
-            {% for user in users %}
-                <li>{{ user.email }}</li>
-                {% if user.notes %}
-                    <ul>
-                        {% for note in user.notes %}
-                            <li>{{ note.title }}</li>
-                        {% endfor %}
-                    </ul>
+    <h1>All Notes</h1>
+    <a href="{{ url_for('create_note') }}">Create New Note</a>
+    <ul>
+        {% for note in notes %}
+            <li>
+                <b>{{ note.title }}</b>
+                <p>{{ note.content }}</p>
+                {% if current_user.is_authenticated and note.author == current_user %}
+                    <a href="{{ url_for('update_note', note_id=note.id) }}">✏️ Edit</a>
+                    <form method="POST" action="{{ url_for('delete_note', note_id=note.id) }}" style="display:inline;">
+                        <button type="submit">🗑 Delete</button>
+                    </form>
                 {% endif %}
-            {% endfor %}
-        </ul>
-    {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
