@@ -193,4 +193,4 @@ if __name__ == '__main__':
         db.create_all()
         # logging.info(' * Database initialized.')
         print(' * Database initialized.')
-    app.run(debug=True, port=5555, host='0.0.0.0')
+    app.run(debug=False, port=5555, host='0.0.0.0')
