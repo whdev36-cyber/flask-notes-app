@@ -155,7 +155,18 @@ def update_note(note_id):
         return redirect(url_for('index'))
     return render('note_form.html', form=form, title='Update Note')
 
-# @app.route('/delete/note')
+@app.route('/delete/note/<note_id>')
+@login_required
+def delete_note(note_id):
+    note = Note.query.get_or_404(note_id)
+    if note.author != current_user:
+        flash('Unauthorized action.', category='danger')
+        return redirect(url_for('index'))
+    
+    db.session.delete(note)
+    db.session.commit()
+    flash('Note deleted successfully!', category='info')
+    return redirect(url_for('index'))
 
 # Run app
 if __name__ == '__main__':
