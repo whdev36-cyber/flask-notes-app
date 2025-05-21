@@ -6,17 +6,26 @@
         <h2 class="text-center mb-4">Create Account</h2>
         <form method="post" novalidate>
             {{ form.csrf_token }}
-            <div class="mb-3">
+            <div class="form-group mb-3">
                 {{ form.email.label(class="form-label") }}
-                {{ form.email(class="form-control", placeholder="you@example.com") }}
+                {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else ""), placeholder="Email address") }}
+                {% for error in form.email.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
             </div>
-            <div class="mb-3">
+            <div class="form-group mb-3">
                 {{ form.password.label(class="form-label") }}
-                {{ form.password(class="form-control", placeholder="Create a password") }}
+                {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else ""), placeholder="Create a password") }}
+                {% for error in form.password.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
             </div>
-            <div class="mb-4">
+            <div class="form-group mb-4">
                 {{ form.password_confirm.label(class="form-label") }}
-                {{ form.password_confirm(class="form-control", placeholder="Confirm your password") }}
+                {{ form.password_confirm(class="form-control" + (" is-invalid" if form.password_confirm.errors else ""), placeholder="Confirm your password") }}
+                {% for error in form.password_confirm.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
             </div>
             {{ form.submit(class="btn btn-primary w-100") }}
         </form>
