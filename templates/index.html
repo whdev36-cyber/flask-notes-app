@@ -5,7 +5,13 @@
         <ul>
             {% for user in users %}
                 <li>{{ user.email }}</li>
-                </li>
+                {% if user.notes %}
+                    <ul>
+                        {% for note in user.notes %}
+                            <li>{{ note.title }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             {% endfor %}
         </ul>
     {% endif %}

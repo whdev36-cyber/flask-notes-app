@@ -80,7 +80,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 class NoteForm(FlaskForm):
-    title = StringField('Title', validators=[Length(min=1, max=150)])
+    title = StringField('Title', validators=[Length(min=1, max=150), DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Save')
 
@@ -138,7 +138,23 @@ def create_note():
         return redirect(url_for('index'))
     return render('note_form.html', form=form, title='Create Note')
 
-# @app.route('/update/note')
+@app.route('/update/note/<int:note_id>', methods=['GET', 'POST'])
+@login_required
+def update_note(note_id):
+    note = Note.query.get_or_404(note_id)
+    if note.author != current_user:
+        flash('Unauthorized access to update this note.', category='danger')
+        return redirect(url_for('index'))
+    
+    form = NoteForm(obj=note)
+    if form.validate_on_submit():
+        note.title = form.title.data
+        note.content = form.content.data
+        db.session.commit()
+        flash('Note updated successfully!', category='success')
+        return redirect(url_for('index'))
+    return render('note_form.html', form=form, title='Update Note')
+
 # @app.route('/delete/note')
 
 # Run app
