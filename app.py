@@ -10,6 +10,9 @@ from datetime import datetime as dt
 import os
 import dotenv
 # import logging
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+# from flask_admin import expose
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -83,6 +86,19 @@ class NoteForm(FlaskForm):
     title = StringField('Title', validators=[Length(min=1, max=150), DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Save')
+
+# Protect admin panel
+class AdminModelView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.email == 'admin@mail.com'
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('login'))
+
+# Register admin
+admin = Admin(app, name="Notes Admin", template_mode="bootstrap4")
+admin.add_view(AdminModelView(User, db.session))
+admin.add_view(AdminModelView(Note, db.session))
 
 # Routes
 @app.route('/')
