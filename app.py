@@ -145,8 +145,8 @@ def create_note():
 @login_required
 def update_note(note_id):
     note = Note.query.get_or_404(note_id)
-    if note.author != current_user:
-        flash('Unauthorized access to update this note.', category='danger')
+    if note.user_id != current_user.id:
+        flash('Access denied!', 'danger')
         return redirect(url_for('index'))
     
     form = NoteForm(obj=note)
@@ -162,8 +162,8 @@ def update_note(note_id):
 @login_required
 def delete_note(note_id):
     note = Note.query.get_or_404(note_id)
-    if note.author != current_user:
-        flash('Unauthorized action.', category='danger')
+    if note.user_id != current_user.id:
+        flash('Access denied!', 'danger')
         return redirect(url_for('index'))
     
     db.session.delete(note)
